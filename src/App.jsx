@@ -34,7 +34,7 @@ const App = () => {
             <Route path='/home' element={<Home/>} />
             <Route path='/about' element={<About/>} />
 
-          </Routes>s
+          </Routes>
       </Wrapper>
    </BrowserRouter>
   )
