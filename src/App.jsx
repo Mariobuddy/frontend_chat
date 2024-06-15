@@ -1,12 +1,16 @@
-import React,{useEffect,useState} from 'react'
-import styled from 'styled-components'
-import { ToastContainer } from 'react-toastify'
+import React, { useEffect, useState, lazy } from "react";
+import styled from "styled-components";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from './pages/Home';
-import About from './pages/About';
-
-
+const Home = lazy(() => import("./pages/Home/index"));
+const Login = lazy(() => import("./pages/Login/index"));
+// const Register = lazy(() => import("./pages/Register/index"));
+const Chats = lazy(() => import("./pages/Chats/index"));
+const Groups = lazy(() => import("./pages/Groups/index"));
+const ProtectedRoutes = lazy(() =>
+  import("./components/auth/ProtectedRoutes/index")
+);
 const App = () => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -23,24 +27,35 @@ const App = () => {
       window.removeEventListener("resize", checkScreenWidth);
     };
   }, []);
+
+  let isLogin = true;
   return (
-   <BrowserRouter>
-    <Wrapper>
-    <ToastContainer
-            position={isMobile?"top-center":"bottom-right"}
-           style={{zIndex:"2147483647"}}
+    <BrowserRouter>
+      <Wrapper>
+        <ToastContainer
+          position={isMobile ? "top-center" : "bottom-right"}
+          style={{ zIndex: "2147483647" }}
+        />
+        <Routes>
+          <Route element={<ProtectedRoutes isLogin={isLogin} />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/chats" element={<Chats />} />
+            <Route path="/groups" element={<Groups />} />
+          </Route>
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoutes isLogin={!isLogin} redirect="/">
+                <Login />
+              </ProtectedRoutes>
+            }
           />
-          <Routes>
-            <Route path='/home' element={<Home/>} />
-            <Route path='/about' element={<About/>} />
-
-          </Routes>
+        </Routes>
       </Wrapper>
-   </BrowserRouter>
-  )
-}
+    </BrowserRouter>
+  );
+};
 
-export default App
+export default App;
 
-
-const Wrapper=styled.div``
+const Wrapper = styled.div``;

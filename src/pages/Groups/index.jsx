@@ -1,9 +1,9 @@
 import React from 'react'
 
-const About = () => {
+const Groups = () => {
   return (
     <div>index</div>
   )
 }
 
-export default About
+export default Groups
